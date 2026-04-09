@@ -35,7 +35,7 @@ ORDER BY top_vezes DESC
 LIMIT 1;
 
 -- Quantos artistas diferentes há.
-SELECT DISTINCT artista
+SELECT COUNT(DISTINCT (artista)) AS artistas_diferentes
 FROM top;
 
 -- Qual música com mais streams.
@@ -63,8 +63,13 @@ GROUP BY artista
 ORDER BY total_registros DESC
 LIMIT 1;
 
+-- Quantos artistas possuem nome iniciando com a letra “H”.
+SELECT COUNT( DISTINCT artista) AS inicial 
+FROM top
+WHERE artista LIKE 'h%';
+
 -- Quais as músicas da artista “Anitta” estão na tabela.
-SELECT musica
+SELECT *
 FROM top
 WHERE artista = 'Anitta';
 
@@ -78,8 +83,13 @@ SELECT musica
 FROM top
 WHERE posicao = 3480;
 
--- Quantas músicas o artista “The Weeknd” possui e quais.
+-- Quais músicas o artista “The Weeknd” possui.
 SELECT musica
+FROM top
+WHERE artista = 'The Weeknd';
+
+-- Quantas músicas o artista “The Weeknd” possui.
+SELECT artista, count(musica) as qts_music
 FROM top
 WHERE artista = 'The Weeknd';
 
@@ -89,100 +99,32 @@ FROM top
 WHERE musica LIKE '%girl%';
 
 -- Qual o total de streams do artista “Post Malone”.
-SELECT SUM(total_streans) as total_de_streams_post_malone
+SELECT artista, MAX(total_streans) as total_de_streams_post_malone
 FROM top
 WHERE artista = 'Post Malone';
 
 -- Quais são os 5 artistas com mais registros, de forma decrescente.
-SELECT posicao
+SELECT artista, COUNT(*) AS total_registros
 FROM top
-WHERE maior_posicao = 5
+GROUP BY artista
+ORDER BY total_registros DESC
 LIMIT 5;
 
-
-
-
-
-
-
--- SELECT filtrado
-SELECT posicao, artista, musica
-FROM top;
-
--- filtrando com WHERE
-SELECT posicao, artista, musica
-FROM top
-WHERE artista = "DAFT PUNK";
-
--- filtrado operadores relacionais >, <, <>, <=, >=
-Select *
-FROM top
-WHERE top_vezes < 100;-- filtrado com operadores lógicos - and, or, not
-Select *
-FROM top
-WHERE artista = "SZA" AND maior_posicao = 5;
-
--- ordernando = order by , asc = de cima pra baixo, desc = de baixo pra cima
-SELECT artista, musica
-FROM top
-ORDER BY artista ASC;
-
--- entre = between
+-- Qual o total de streams das 10 músicas com mais streams.
 SELECT *
 FROM top
-WHERE maior_posicao BETWEEN 10 and 15;
+ORDER BY total_streans DESC
+LIMIT 10;
 
--- IN - dentro de uma lista
-SELECT *
+-- Qual a música com o mínimo de streams que atingiu a 1ª posição no top 10.
+SELECT musica, artista, MIN(total_streans) AS musica_minimo
 FROM top
-WHERE artista IN ('BTS', 'Childish Gambino', 'Yung Lean');
+WHERE artista;
 
--- LIKE - pesquisa nomes
-SELECT artista, musica
+
+-- Qual a música com o mínimo de streams da artista Taylor Swift.
+SELECT musica, artista, MIN(total_streans) AS musica_minimo
 FROM top
-WHERE musica LIKE '%dat%';
+WHERE artista = 'Taylor Swift';
 
--- count - conta a quantidade de vezes que o retorno te dá
-SELECT COUNT(*) AS contagem
-FROM top
-WHERE artista = 'Childish Gambino';
 
--- contagem - registros diferentes
-SELECT DISTINCT (artista) AS diferente
-FROM top;
-
--- contagem de artistas diferentes
-SELECT COUNT(DISTINCT (artista)) AS diferente
-FROM top;
-
--- agrupar resultados
-SELECT artista, COUNT(musica) AS vezes
-FROM top
-GROUP BY artista ;
-
--- limit - limita os resultados
-SELECT *
-FROM top
-WHERE maior_posicao = 7
-LIMIT 5;
-
--- soma de resultados
-SELECT SUM(total_streans) as total_de_streams_da_tabela
-FROM top;
-
--- média de resultados
-SELECT AVG(total_streans) as media_de_streams_da_tabela
-FROM top;
-
--- valor maximo de resultados
-SELECT MAX(total_streans) as maximo_de_streams_da_tabela
-FROM top;
-
--- valor min de resultados
-SELECT MIN(total_streans) as minimo_de_streams_da_tabela
-FROM top;
-
--- verifica se o valor é nulo
-SELECT *
-FROM top
-WHERE maior_posicao IS NULL;
