@@ -99,7 +99,7 @@ FROM top
 WHERE musica LIKE '%girl%';
 
 -- Qual o total de streams do artista “Post Malone”.
-SELECT artista, MAX(total_streans) as total_de_streams_post_malone
+SELECT artista, SUM(total_streans) as total_de_streams_post_malone
 FROM top
 WHERE artista = 'Post Malone';
 
