@@ -44,6 +44,13 @@ FROM top
 ORDER BY total_streans DESC
 LIMIT 1;
 
+SELECT musica, total_streans
+FROM top
+WHERE total_streans = (
+    SELECT max(total_streans)
+    FROM top
+    );
+
 -- Qual música com maior pico de streams.
 SELECT musica, pico_streams 
 FROM top
@@ -121,6 +128,15 @@ SELECT musica, artista, MIN(total_streans) AS musica_minimo
 FROM top
 WHERE artista;
 
+-- Quais as músicas que já estiveram no top 1 e estiveram 7 vezes na maior posição.
+SELECT musica AS vezes, vezes_maior_posicao, maior_posicao
+FROM top
+WHERE maior_posicao = 1 AND vezes_maior_posicao = '(x7)';
+
+-- Quais músicas tiveram menos de 500 mil streams e ficaram entre o top 5 e 10.
+SELECT musica, total_streans
+FROM top
+WHERE total_streans < 500000; 
 
 -- Qual a música com o mínimo de streams da artista Taylor Swift.
 SELECT musica, artista, MIN(total_streans) AS musica_minimo
@@ -128,3 +144,15 @@ FROM top
 WHERE artista = 'Taylor Swift';
 
 
+
+-- Quais músicas tem total de streams acima da média?
+SELECT musica, total_streans
+FROM top
+WHERE total_streans > (
+   SELECT AVG(total_streans)
+   FROM top
+   );
+
+-- Mostra a média da tabela
+SELECT AVG(total_streans)
+FROM top;
